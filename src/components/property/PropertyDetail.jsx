@@ -5,7 +5,8 @@ const PropertyDetail = () => {
   const property = {
     id,
     title: `Rumah Modern #${id}`,
-    description: "Rumah dengan desain modern, lokasi strategis, dan cocok untuk keluarga. Dilengkapi dengan taman dan ruang keluarga yang luas.",
+    description:
+      "Rumah dengan desain modern, lokasi strategis, dan cocok untuk keluarga. Dilengkapi dengan taman dan ruang keluarga yang luas.",
     price: "Rp. 1.500.000.000",
     features: {
       bedrooms: 3,
@@ -17,17 +18,21 @@ const PropertyDetail = () => {
   };
 
   return (
-    <div>
+    <div >
       {/* Hero Image */}
       <section className="py-12 bg-gray-100">
-        <div className="container mx-auto px-4">
-          <img
-            src={property.image}
-            alt="Properti"
-            className="w-full h-96 object-cover rounded-xl mb-6"
-          />
-          <h2 className="text-3xl font-semibold mb-4">{property.title}</h2>
-          <p className="text-lg text-gray-600">{property.description}</p>
+        <div className="container mx-auto px-4 sm:p-0">
+          <div className="sm:flex space-x-2">
+            <img
+              src={property.image}
+              alt="Properti"
+              className="w-full h-96 object-cover rounded-xl mb-6"
+            />
+            <div className="">
+              <h2 className="text-3xl font-semibold mb-4">{property.title}</h2>
+              <p className="text-lg text-gray-600">{property.description}</p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -37,10 +42,19 @@ const PropertyDetail = () => {
           <div>
             <h3 className="text-2xl font-semibold mb-4">Fitur Properti</h3>
             <ul className="space-y-3 text-gray-700">
-              <li><strong>Kamar Tidur:</strong> {property.features.bedrooms} Kamar</li>
-              <li><strong>Kamar Mandi:</strong> {property.features.bathrooms} Kamar</li>
-              <li><strong>Luas Bangunan:</strong> {property.features.area}</li>
-              <li><strong>Luas Tanah:</strong> {property.features.lotSize}</li>
+              <li>
+                <strong>Kamar Tidur:</strong> {property.features.bedrooms} Kamar
+              </li>
+              <li>
+                <strong>Kamar Mandi:</strong> {property.features.bathrooms}{" "}
+                Kamar
+              </li>
+              <li>
+                <strong>Luas Bangunan:</strong> {property.features.area}
+              </li>
+              <li>
+                <strong>Luas Tanah:</strong> {property.features.lotSize}
+              </li>
             </ul>
           </div>
           <div>
@@ -60,7 +74,9 @@ const PropertyDetail = () => {
 
       {/* CTA */}
       <section className="py-12 bg-blue-50 text-center">
-        <h2 className="text-2xl font-semibold mb-4">Tertarik dengan Properti Ini?</h2>
+        <h2 className="text-2xl font-semibold mb-4">
+          Tertarik dengan Properti Ini?
+        </h2>
         <Link
           to="/properties"
           className="bg-blue-600 text-white py-2 px-6 rounded-full hover:bg-blue-700 transition"

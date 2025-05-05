@@ -5,16 +5,16 @@ const Home = () => {
     <div>
       {/* Hero Section */}
       <section
-      className="bg-cover opacity-40  bg-center bg-no-repeat text-white py-20 text-center"
+      className="bg-cover   bg-center bg-no-repeat text-black py-20 text-center"
       style={{ backgroundImage: "url('/header_img.webp')" }}
     >
       <div className=" py-20">
         <div className="container mx-auto px-4">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Selamat Datang di RumahAsri
+          <h1 className="text-4xl md:text-6xl capitalize font-bold mb-4">
+            paddington village  
           </h1>
           <p className="text-lg md:text-xl mb-6">
-            Temukan rumah impian Anda bersama kami!
+          Rumah kapsul adalah hunian mandiri berukuran minimalis yang dirancang untuk efisiensi ruang dan biaya, cocok untuk kehidupan di kota besar dengan lahan terbatas. Dibangun dengan sistem prefabrikasi yang cepat dan modular, rumah ini mudah disesuaikan dengan kebutuhan, menawarkan solusi hidup yang praktis, terjangkau, dan fleksibel.
           </p>
           <Link
             to="/properties"
