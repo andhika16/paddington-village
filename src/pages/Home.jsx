@@ -5,7 +5,7 @@ const Home = () => {
     <div>
       {/* Hero Section */}
       <section
-      className="bg-cover   bg-center bg-no-repeat text-black py-20 text-center"
+      className="bg-cover bg-center bg-no-repeat text-black py-20 text-center"
       style={{ backgroundImage: "url('/header_img.webp')" }}
     >
       <div className=" py-20">

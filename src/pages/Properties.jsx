@@ -1,27 +1,43 @@
-import { useState } from "react";
-import PropertyCard from "../components/property/PropertyCard"; // Import PropertyCard
-import SidebarPropertyFilter from "../components/property/SidebarPropertyFilter"; // Import SidebarPropertyFilter
+import { useEffect, useState } from "react";
+import PropertyCard from "../components/property/PropertyCard";
+import SidebarPropertyFilter from "../components/property/SidebarPropertyFilter";
+import { getHouses, deleteHouse } from "../firebase/firebase-operations";
 
 const Properties = () => {
   const [filters, setFilters] = useState({
-    price: "all",
-    bedrooms: "all",
+    size: "all",
+    jumlahPenghuni: "all",
     type: "all",
   });
+
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [properties, setProperties] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const properties = [
-    { id: 1, title: "Rumah Modern #1", price: 1500000000, bedrooms: 3, type: "modern", image: "https://dummyimage.com/720x600/000/fff&text=Rumah+Modern+1" },
-    { id: 2, title: "Rumah Minimalis #2", price: 1200000000, bedrooms: 2, type: "minimalis", image: "https://dummyimage.com/720x600/000/fff&text=Rumah+Minimalis+2" },
-    { id: 3, title: "Villa Mewah #3", price: 2500000000, bedrooms: 4, type: "villa", image: "https://dummyimage.com/720x600/000/fff&text=Villa+Mewah+3" },
-    { id: 4, title: "Rumah Tepi Laut #4", price: 1800000000, bedrooms: 3, type: "pantai", image: "https://dummyimage.com/720x600/000/fff&text=Rumah+Tepi+Laut+4" },
-    { id: 5, title: "Kamar Kost #5", price: 500000000, bedrooms: 1, type: "kost", image: "https://dummyimage.com/720x600/000/fff&text=Kamar+Kost+5" },
-  ];
+  useEffect(() => {
+    const fetchProperties = async () => {
+      setLoading(true);
+      const data = await getHouses();
+      setProperties(data);
+      setLoading(false);
+    };
 
-  const filteredProperties = properties.filter(property => {
+    fetchProperties();
+  }, []);
+
+  const handleDelete = async (id) => {
+    try {
+      await deleteHouse(id);
+      setProperties((prev) => prev.filter((property) => property.id !== id));
+    } catch (error) {
+      console.error("Gagal menghapus properti:", error);
+    }
+  };
+
+  const filteredProperties = properties.filter((property) => {
     return (
-      (filters.price === "all" || property.price <= parseInt(filters.price)) &&
-      (filters.bedrooms === "all" || property.bedrooms === parseInt(filters.bedrooms)) &&
+      (filters.size === "all" || property.size === filters.size) &&
+      (filters.jumlahPenghuni === "all" || property.jumlah_penghuni === parseInt(filters.jumlahPenghuni)) &&
       (filters.type === "all" || property.type === filters.type)
     );
   });
@@ -30,7 +46,6 @@ const Properties = () => {
     <div className="flex flex-col md:flex-row">
       {/* Main Content */}
       <div className="w-full md:w-3/4 p-4">
-        {/* Button Toggle Sidebar */}
         <button
           className="md:hidden mb-4 p-2 bg-blue-600 text-white rounded"
           onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -39,14 +54,26 @@ const Properties = () => {
         </button>
 
         <h2 className="text-2xl font-bold mb-8 text-center">Daftar Properti</h2>
-        <div className="grid md:grid-cols-3 gap-6">
-          {filteredProperties.map((property) => (
-            <PropertyCard key={property.id} property={property} />
-          ))}
-        </div>
+
+        {loading ? (
+          <p className="text-center">Memuat data properti...</p>
+        ) : (
+          <div className="grid md:grid-cols-3 gap-6">
+            {filteredProperties.map((property) => (
+              <div key={property.id} className="relative">
+                <PropertyCard property={property} />
+                <button
+                  onClick={() => handleDelete(property.id)}
+                  className="absolute top-2 right-2 bg-red-500 text-white text-sm px-2 py-1 rounded hover:bg-red-600"
+                >
+                  Hapus
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* Sidebar */}
       <SidebarPropertyFilter
         filters={filters}
         setFilters={setFilters}

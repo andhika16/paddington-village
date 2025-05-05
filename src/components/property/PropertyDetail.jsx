@@ -1,73 +1,71 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getHouseById } from "../../firebase/firebase-operations"; // Pastikan fungsi ini ada
 
 const PropertyDetail = () => {
-  const { id } = useParams(); // Mengambil ID dari URL
-  const property = {
-    id,
-    title: `Rumah Modern #${id}`,
-    description:
-      "Rumah dengan desain modern, lokasi strategis, dan cocok untuk keluarga. Dilengkapi dengan taman dan ruang keluarga yang luas.",
-    price: "Rp. 1.500.000.000",
-    features: {
-      bedrooms: 3,
-      bathrooms: 2,
-      area: "120 m²",
-      lotSize: "200 m²",
-    },
-    image: `https://dummyimage.com/720x600/000/fff&text=Rumah+Modern+${id}`,
-  };
+  const { id } = useParams();
+  const [property, setProperty] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProperty = async () => {
+      setLoading(true);
+      const data = await getHouseById(id);
+      setProperty(data);
+      setLoading(false);
+    };
+
+    fetchProperty();
+  }, [id]);
+
+  if (loading) return <p className="text-center py-12">Memuat data...</p>;
+  if (!property) return <p className="text-center py-12">Properti tidak ditemukan.</p>;
 
   return (
-    <div >
-      {/* Hero Image */}
+    <div>
+      {/* Gambar Hero */}
       <section className="py-12 bg-gray-100">
         <div className="container mx-auto px-4 sm:p-0">
           <div className="sm:flex space-x-2">
             <img
-              src={property.image}
-              alt="Properti"
+              src={property.gambar}
+              alt={property.type}
               className="w-full h-96 object-cover rounded-xl mb-6"
             />
-            <div className="">
-              <h2 className="text-3xl font-semibold mb-4">{property.title}</h2>
-              <p className="text-lg text-gray-600">{property.description}</p>
+            <div>
+              <h2 className="text-3xl font-semibold mb-4">{property.type} - {property.model}</h2>
+              <p className="text-lg text-gray-600">
+                Rumah {property.model} tipe {property.type} dengan luas {property.size} dan konstruksi {property.area_konstruksi}.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Informasi Properti */}
+      {/* Detail Properti */}
       <section className="py-12 bg-white">
         <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
-            <h3 className="text-2xl font-semibold mb-4">Fitur Properti</h3>
+            <h3 className="text-2xl font-semibold mb-4">Spesifikasi</h3>
             <ul className="space-y-3 text-gray-700">
-              <li>
-                <strong>Kamar Tidur:</strong> {property.features.bedrooms} Kamar
-              </li>
-              <li>
-                <strong>Kamar Mandi:</strong> {property.features.bathrooms}{" "}
-                Kamar
-              </li>
-              <li>
-                <strong>Luas Bangunan:</strong> {property.features.area}
-              </li>
-              <li>
-                <strong>Luas Tanah:</strong> {property.features.lotSize}
-              </li>
+              <li><strong>Luas:</strong> {property.size}</li>
+              <li><strong>Area Konstruksi:</strong> {property.area_konstruksi}</li>
+              <li><strong>Jumlah Penghuni:</strong> {property.jumlah_penghuni}</li>
+              <li><strong>Dimensi:</strong> {property.dimensi}</li>
+              <li><strong>Berat Unit:</strong> {property.berat_unit}</li>
             </ul>
           </div>
           <div>
-            <h3 className="text-2xl font-semibold mb-4">Harga</h3>
-            <p className="text-xl font-bold text-blue-600">{property.price}</p>
-            <div className="mt-6">
-              <Link
-                to="/contact"
-                className="bg-blue-600 text-white py-2 px-6 rounded-full hover:bg-blue-700 transition"
-              >
-                Hubungi Kami
-              </Link>
-            </div>
+            <h3 className="text-2xl font-semibold mb-4">Kelengkapan</h3>
+            {Array.isArray(property.kelengkapan) ? (
+              <ul className="list-disc list-inside text-gray-700">
+                {property.kelengkapan.map((item, idx) => (
+                  <li key={idx}>{item}</li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-gray-500">Data kelengkapan tidak tersedia.</p>
+            )}
           </div>
         </div>
       </section>
@@ -77,12 +75,12 @@ const PropertyDetail = () => {
         <h2 className="text-2xl font-semibold mb-4">
           Tertarik dengan Properti Ini?
         </h2>
-        <Link
-          to="/properties"
+        <a
+          href="https://wa.me/6281234567890" // ganti dengan kontak kamu
           className="bg-blue-600 text-white py-2 px-6 rounded-full hover:bg-blue-700 transition"
         >
-          Lihat Properti Lain
-        </Link>
+          Hubungi Kami via WhatsApp
+        </a>
       </section>
     </div>
   );

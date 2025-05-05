@@ -29,14 +29,14 @@ const SidebarPropertyFilter = ({ filters, setFilters, sidebarOpen }) => {
           Kamar Tidur
         </label>
         <select
-          value={filters.bedrooms}
-          onChange={(e) => setFilters({ ...filters, bedrooms: e.target.value })}
+          value={filters.type}
+          onChange={(e) => setFilters({ ...filters, type: e.target.value })}
           className="w-full p-2 border border-gray-300 rounded"
         >
           <option value="all">Semua Kamar</option>
-          <option value="1">1 Kamar</option>
-          <option value="2">2 Kamar</option>
-          <option value="3">3 Kamar</option>
+          <option value="natural house">1 Kamar</option>
+          <option value="cabin house">2 Kamar</option>
+          <option value="">3 Kamar</option>
           <option value="4">4 Kamar</option>
         </select>
       </div>
@@ -53,7 +53,7 @@ const SidebarPropertyFilter = ({ filters, setFilters, sidebarOpen }) => {
         >
           <option value="all">Semua Tipe</option>
           <option value="modern">Modern</option>
-          <option value="minimalis">Minimalis</option>
+          <option value="cabin house">cabin house</option>
           <option value="villa">Villa</option>
           <option value="pantai">Tepi Laut</option>
           <option value="kost">Kost</option>
