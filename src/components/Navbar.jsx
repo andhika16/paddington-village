@@ -1,9 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { FiMenu, FiX } from "react-icons/fi";
-
+import PaddingtonLogo from "../assets/assetbawaan/paddington_logo_tiga.svg";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isTop, setIsTop] = useState(true);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsTop(window.scrollY === 0);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const navLinks = [
     { name: "Beranda", path: "/" },
@@ -13,11 +23,17 @@ const Navbar = () => {
   ];
 
   return (
-    <header className="bg-white shadow-md sticky top-0 z-50">
-      <div className="container mx-auto  py-4 flex justify-between items-center">
+    <header
+      className={`sticky top-0 z-50 transition-all duration-300 ${
+        isTop
+          ? "bg-white/20 backdrop-blur-md shadow-none"
+          : "bg-white shadow-md"
+      }`}
+    >
+      <div className="container mx-auto py-2 p-3 flex justify-between items-center">
         {/* Logo */}
         <Link to="/" className="text-xl font-bold text-blue-600">
-          RumahAsri
+          <img className="w-20 md:w-32" src={PaddingtonLogo} alt="paddington-logo" />
         </Link>
 
         {/* Desktop Nav */}
@@ -48,12 +64,12 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden bg-white shadow-md px-4 pb-4 space-y-2">
+        <div className="md:hidden uppercase bg-white shadow-md px-4 pb-4 space-y-2">
           {navLinks.map((link) => (
             <NavLink
               key={link.path}
               to={link.path}
-              onClick={() => setIsOpen(false)} // auto close on click
+              onClick={() => setIsOpen(false)}
               className={({ isActive }) =>
                 `block py-2 border-b ${
                   isActive ? "text-blue-600 font-semibold" : "text-gray-700"

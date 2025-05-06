@@ -53,8 +53,8 @@ const SidebarPropertyFilter = ({ filters, setFilters, sidebarOpen }) => {
         >
           <option value="all">Semua Tipe</option>
           <option value="modern">Modern</option>
-          <option value="cabin house">cabin house</option>
-          <option value="villa">Villa</option>
+          <option value="cabin house">Cabin House</option>
+          <option value="natural house">Natural House</option>
           <option value="pantai">Tepi Laut</option>
           <option value="kost">Kost</option>
         </select>
