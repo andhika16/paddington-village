@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
-import { createHouse, updateHouse } from "./firebaseOperations"; // Pastikan fungsi sudah ada
+import { createHouse, updateHouse } from "../firebase/firebase-operations"; // Pastikan fungsi sudah ada
 
-const HouseForm = ({ houseToUpdate, setHouseToUpdate }) => {
+const PropertiesForm = ({ houseToUpdate, setHouseToUpdate }) => {
   const [houseData, setHouseData] = useState({
     type: "",
     model: "",
@@ -11,7 +11,7 @@ const HouseForm = ({ houseToUpdate, setHouseToUpdate }) => {
     jumlah_penghuni: "",
     dimensi: { panjang: "", lebar: "" },
     berat_unit: "",
-    kelengkapan: "",
+    kelengkapan: [""],
     gambar: "",
   });
 
@@ -55,6 +55,9 @@ const HouseForm = ({ houseToUpdate, setHouseToUpdate }) => {
       // Create a new house
       await createHouse(houseData);
     }
+
+    console.log(houseData);
+    
 
     // Reset form after submit
     setHouseData({
@@ -183,7 +186,7 @@ const HouseForm = ({ houseToUpdate, setHouseToUpdate }) => {
         <input
           type="text"
           name="kelengkapan"
-          value={houseData.kelengkapan.join(",")}
+          value={houseData.kelengkapan}
           onChange={handleChange}
           placeholder="Pisahkan dengan koma"
           className="w-full mt-2 p-2 border border-gray-300 rounded-lg"
@@ -213,4 +216,4 @@ const HouseForm = ({ houseToUpdate, setHouseToUpdate }) => {
   );
 };
 
-export default HouseForm;
+export default PropertiesForm;

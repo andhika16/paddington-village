@@ -12,7 +12,7 @@ const dummyHouses = [
     dimensi: "10x12m",
     berat_unit: "3 ton",
     kelengkapan: ["AC", "Furnished", "Garasi"],
-    gambar: "https://dummyimage.com/720x600/000/fff&text=capsul+Model+E8",
+    gambar: "",
   },
   {
     type: "Natural House",

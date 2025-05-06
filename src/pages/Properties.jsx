@@ -42,6 +42,9 @@ const Properties = () => {
     );
   });
 
+  console.log(filteredProperties);
+  
+
   return (
     <div className="flex flex-col md:flex-row">
       {/* Main Content */}
