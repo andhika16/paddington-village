@@ -1,219 +1,233 @@
-/* eslint-disable react/prop-types */
-import { useState, useEffect } from "react";
-import { createHouse, updateHouse } from "../firebase/firebase-operations"; // Pastikan fungsi sudah ada
+import { useState } from "react";
+import PropTypes from "prop-types";
+import { createHouse } from "../firebase/firebase-operations";
 
-const PropertiesForm = ({ houseToUpdate, setHouseToUpdate }) => {
-  const [houseData, setHouseData] = useState({
-    type: "",
-    model: "",
-    size: "",
-    area_construction: "",
-    jumlah_penghuni: "",
-    dimensi: { panjang: "", lebar: "" },
-    berat_unit: "",
-    kelengkapan: [""],
-    gambar: "",
-  });
+// Reusable Input component for form fields
+const InputField = ({
+  label,
+  value,
+  onChange,
+  type = "text",
+  required = true,
+}) => (
+  <div>
+    <label className="block text-gray-700 font-semibold mb-1">{label}</label>
+    <input
+      type={type}
+      value={value}
+      onChange={onChange}
+      className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+      required={required}
+    />
+  </div>
+);
 
-  useEffect(() => {
-    if (houseToUpdate) {
-      setHouseData(houseToUpdate);
+InputField.propTypes = {
+  label: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  onChange: PropTypes.func.isRequired,
+  type: PropTypes.string,
+  required: PropTypes.bool,
+};
+
+const HouseForm = () => {
+  const [type, setType] = useState("");
+  const [jumlahLantai, setJumlahLantai] = useState("");
+  const [model, setModel] = useState("");
+  const [size, setSize] = useState("");
+  const [areaKonstruksi, setAreaKonstruksi] = useState("");
+  const [jumlahPenghuni, setJumlahPenghuni] = useState("");
+  const [dimensi, setDimensi] = useState("");
+  const [beratUnit, setBeratUnit] = useState("");
+  const [kelengkapan, setKelengkapan] = useState([]);
+  const [gambar, setGambar] = useState(null);
+
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false); // ✅ Tambahan
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setGambar(file);
+  };
+
+  const validateForm = () => {
+    if (
+      !type ||
+      !jumlahLantai ||
+      !model ||
+      !size ||
+      !areaKonstruksi ||
+      !jumlahPenghuni ||
+      !dimensi ||
+      !beratUnit ||
+      !gambar
+    ) {
+      setError("Semua field harus diisi dan gambar harus dipilih!");
+      return false;
     }
-  }, [houseToUpdate]);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    if (name === "panjang" || name === "lebar") {
-      setHouseData({
-        ...houseData,
-        dimensi: {
-          ...houseData.dimensi,
-          [name]: value,
-        },
-      });
-    } else if (name === "kelengkapan") {
-      setHouseData({
-        ...houseData,
-        kelengkapan: value.split(","),
-      });
-    } else {
-      setHouseData({
-        ...houseData,
-        [name]: value,
-      });
-    }
+    return true;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
+    setSuccess(null);
 
-    if (houseToUpdate) {
-      // Update the existing house data
-      await updateHouse(houseToUpdate.id, houseData);
-    } else {
-      // Create a new house
-      await createHouse(houseData);
+    if (!validateForm()) return;
+
+    setIsSubmitting(true); // ✅ Mulai proses
+
+    const namaFile = `../../../public/image/${gambar.name}`;
+
+    const dataRumah = {
+      type,
+      jumlahLantai,
+      model,
+      size,
+      areaKonstruksi,
+      jumlahPenghuni: parseInt(jumlahPenghuni),
+      dimensi,
+      beratUnit,
+      kelengkapan,
+      gambar: namaFile,
+    };
+
+    try {
+      const newId = await createHouse(dataRumah);
+      if (newId) {
+        setSuccess("Data rumah berhasil disimpan dengan ID: " + newId);
+        // Reset form
+        setType("");
+        setJumlahLantai("");
+        setModel("");
+        setSize("");
+        setAreaKonstruksi("");
+        setJumlahPenghuni("");
+        setDimensi("");
+        setBeratUnit("");
+        setKelengkapan([]);
+        setGambar(null);
+      } else {
+        setError("Gagal menyimpan data rumah");
+      }
+    } catch (err) {
+      setError("Terjadi kesalahan saat menyimpan data", err);
+    } finally {
+      setIsSubmitting(false); // ✅ Akhiri proses
     }
-
-    console.log(houseData);
-    
-
-    // Reset form after submit
-    setHouseData({
-      type: "",
-      model: "",
-      size: "",
-      area_construction: "",
-      jumlah_penghuni: "",
-      dimensi: { panjang: "", lebar: "" },
-      berat_unit: "",
-      kelengkapan: "",
-      gambar: "",
-    });
-
-    setHouseToUpdate(null); // Clear update mode
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="max-w-xl mx-auto p-4 border rounded-lg shadow-lg bg-white"
-    >
-      <h2 className="text-2xl mb-4 font-semibold">
-        {houseToUpdate ? "Update House" : "Create House"}
-      </h2>
-
-      {/* Input Fields */}
-      <div className="mb-4">
-        <label className="block text-gray-700">Type:</label>
-        <input
-          type="text"
-          name="type"
-          value={houseData.type}
-          onChange={handleChange}
-          className="w-full mt-2 p-2 border border-gray-300 rounded-lg"
-          required
-        />
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-gray-700">Model:</label>
-        <input
-          type="text"
-          name="model"
-          value={houseData.model}
-          onChange={handleChange}
-          className="w-full mt-2 p-2 border border-gray-300 rounded-lg"
-          required
-        />
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-gray-700">Size (m²):</label>
-        <input
-          type="text"
-          name="size"
-          value={houseData.size}
-          onChange={handleChange}
-          className="w-full mt-2 p-2 border border-gray-300 rounded-lg"
-          required
-        />
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-gray-700">Area Construction (m²):</label>
-        <input
-          type="text"
-          name="area_construction"
-          value={houseData.area_construction}
-          onChange={handleChange}
-          className="w-full mt-2 p-2 border border-gray-300 rounded-lg"
-          required
-        />
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-gray-700">Jumlah Penghuni:</label>
-        <input
-          type="number"
-          name="jumlah_penghuni"
-          value={houseData.jumlah_penghuni}
-          onChange={handleChange}
-          className="w-full mt-2 p-2 border border-gray-300 rounded-lg"
-          required
-        />
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-gray-700">Dimensi Panjang (m):</label>
-        <input
-          type="text"
-          name="panjang"
-          value={houseData.dimensi.panjang}
-          onChange={handleChange}
-          className="w-full mt-2 p-2 border border-gray-300 rounded-lg"
-          required
-        />
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-gray-700">Dimensi Lebar (m):</label>
-        <input
-          type="text"
-          name="lebar"
-          value={houseData.dimensi.lebar}
-          onChange={handleChange}
-          className="w-full mt-2 p-2 border border-gray-300 rounded-lg"
-          required
-        />
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-gray-700">Berat Unit (kg):</label>
-        <input
-          type="text"
-          name="berat_unit"
-          value={houseData.berat_unit}
-          onChange={handleChange}
-          className="w-full mt-2 p-2 border border-gray-300 rounded-lg"
-          required
-        />
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-gray-700">Kelengkapan:</label>
-        <input
-          type="text"
-          name="kelengkapan"
-          value={houseData.kelengkapan}
-          onChange={handleChange}
-          placeholder="Pisahkan dengan koma"
-          className="w-full mt-2 p-2 border border-gray-300 rounded-lg"
-          required
-        />
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-gray-700">Gambar URL:</label>
-        <input
-          type="text"
-          name="gambar"
-          value={houseData.gambar}
-          onChange={handleChange}
-          className="w-full mt-2 p-2 border border-gray-300 rounded-lg"
-          required
-        />
-      </div>
-
-      <button
-        type="submit"
-        className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600"
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
+      <form
+        onSubmit={handleSubmit}
+        className="w-full max-w-2xl bg-white rounded-2xl shadow-xl p-8 space-y-6"
       >
-        {houseToUpdate ? "Update House" : "Create House"}
-      </button>
-    </form>
+        <h2 className="text-2xl font-bold text-gray-800 text-center">
+          Input Rumah Baru
+        </h2>
+
+        <InputField
+          label="Type"
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+        />
+        <InputField
+          label="Jumlah Lantai"
+          value={jumlahLantai}
+          onChange={(e) => setJumlahLantai(e.target.value)}
+        />
+        <InputField
+          label="Model"
+          value={model}
+          onChange={(e) => setModel(e.target.value)}
+        />
+        <InputField
+          label="Size"
+          value={size}
+          onChange={(e) => setSize(e.target.value)}
+        />
+        <InputField
+          label="Area Konstruksi"
+          value={areaKonstruksi}
+          onChange={(e) => setAreaKonstruksi(e.target.value)}
+        />
+        <InputField
+          label="Jumlah Penghuni"
+          value={jumlahPenghuni}
+          onChange={(e) => setJumlahPenghuni(e.target.value)}
+          type="number"
+        />
+        <InputField
+          label="Dimensi"
+          value={dimensi}
+          onChange={(e) => setDimensi(e.target.value)}
+        />
+        <InputField
+          label="Berat Unit"
+          value={beratUnit}
+          onChange={(e) => setBeratUnit(e.target.value)}
+        />
+
+        <div>
+          <label className="block text-gray-700 font-semibold mb-1">
+            Kelengkapan
+          </label>
+          <div className="space-y-2">
+            {["AC", "Furnished", "Garasi"].map((item) => (
+              <label key={item} className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  value={item}
+                  checked={kelengkapan.includes(item)}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setKelengkapan([...kelengkapan, item]);
+                    } else {
+                      setKelengkapan(kelengkapan.filter((val) => val !== item));
+                    }
+                  }}
+                  className="form-checkbox h-4 w-4 text-blue-600"
+                />
+                <span className="text-gray-700">{item}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+        {/* tambahkan bagian upload gambar denah
+         */}
+        <div>
+          <label className="block text-gray-700 font-semibold mb-1">
+            Pilih Gambar
+          </label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+            required
+          />
+        </div>
+
+        {error && <p className="text-red-600 text-center">{error}</p>}
+        {success && <p className="text-green-600 text-center">{success}</p>}
+
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className={`w-full py-2 px-4 rounded-lg transition 
+    ${
+      isSubmitting
+        ? "bg-gray-400 cursor-not-allowed"
+        : "bg-blue-600 hover:bg-blue-700 text-white"
+    }`}
+        >
+          {isSubmitting ? "Menyimpan..." : "Simpan Data"}
+        </button>
+      </form>
+    </div>
   );
 };
 
-export default PropertiesForm;
+export default HouseForm;

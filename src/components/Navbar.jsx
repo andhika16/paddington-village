@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { FiMenu, FiX } from "react-icons/fi";
-import PaddingtonLogo from "../assets/assetbawaan/paddington_logo_tiga.svg";
+import PaddingtonLogo from "../assets/assetbawaan/paddington_logo_enam.png";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isTop, setIsTop] = useState(true);
@@ -20,6 +20,7 @@ const Navbar = () => {
     { name: "Properti", path: "/properties" },
     { name: "Tentang Kami", path: "/about" },
     { name: "Kontak", path: "/contact" },
+    { name: "Form", path: "/propertiesForm" },
   ];
 
   return (
@@ -30,10 +31,10 @@ const Navbar = () => {
           : "bg-white shadow-md"
       }`}
     >
-      <div className="container mx-auto py-2 p-3 flex justify-between items-center">
+      <div className="container mx-auto px-4 py-2 flex justify-between items-center">
         {/* Logo */}
-        <Link to="/" className="text-xl font-bold text-blue-600">
-          <img className="w-20 md:w-32" src={PaddingtonLogo} alt="paddington-logo" />
+        <Link to="/" >
+          <img className="w-32 md:w-36" src={PaddingtonLogo} alt="paddington-logo" />
         </Link>
 
         {/* Desktop Nav */}
@@ -44,8 +45,8 @@ const Navbar = () => {
               to={link.path}
               className={({ isActive }) =>
                 isActive
-                  ? "text-blue-600 underline"
-                  : "hover:text-blue-600 transition"
+                  ? "text-primary underline"
+                  : "hover:text-primary transition"
               }
             >
               {link.name}
@@ -64,7 +65,7 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden uppercase bg-white shadow-md px-4 pb-4 space-y-2">
+        <div className="md:hidden  bg-white shadow-md px-4 pb-4 space-y-2">
           {navLinks.map((link) => (
             <NavLink
               key={link.path}
@@ -72,7 +73,7 @@ const Navbar = () => {
               onClick={() => setIsOpen(false)}
               className={({ isActive }) =>
                 `block py-2 border-b ${
-                  isActive ? "text-blue-600 font-semibold" : "text-gray-700"
+                  isActive ? "text-primary  font-semibold" : "text-gray-700"
                 }`
               }
             >

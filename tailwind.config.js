@@ -5,7 +5,11 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: "#3a73c1", // ganti dengan kode warna yang Anda inginkan
+      },
+    },
   },
   plugins: [],
 }

@@ -7,7 +7,7 @@ const Footer = () => {
         {/* Brand */}
         <div>
           <h2 className="text-2xl font-bold mb-2 text-blue-400">RumahAsri</h2>
-          <p className="text-sm text-gray-300">
+          <p className="text-sm text-gray-300 tracking-wider">
             Temukan rumah impian Anda bersama kami. Hunian nyaman dan aman untuk masa depan Anda.
           </p>
         </div>

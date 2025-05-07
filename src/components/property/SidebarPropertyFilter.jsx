@@ -1,66 +1,75 @@
-/* eslint-disable react/prop-types */
-const SidebarPropertyFilter = ({ filters, setFilters, sidebarOpen }) => {
+// components/FilterForm.jsx
+import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
+
+const useDebounce = (value, delay) => {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => setDebouncedValue(value), delay);
+    return () => clearTimeout(handler);
+  }, [value, delay]);
+
+  return debouncedValue;
+};
+
+const SidebarProperty = ({ onFilter, modelOptions = [], typeOptions = [], sizeOptions = [] }) => {
+  const [model, setModel] = useState("");
+  const [type, setType] = useState("");
+  const [size, setSize] = useState("");
+
+  const debouncedModel = useDebounce(model, 300);
+  const debouncedType = useDebounce(type, 300);
+  const debouncedSize = useDebounce(size, 300);
+
+  useEffect(() => {
+    onFilter({ model: debouncedModel, type: debouncedType, size: debouncedSize });
+  }, [debouncedModel, debouncedType, debouncedSize, onFilter]);
+
   return (
-    <div
-      className={`w-full md:w-1/4 p-4 bg-gray-200 transition-all ${
-        sidebarOpen ? "block" : "hidden"
-      } md:block`}
-    >
-      <h3 className="text-lg font-semibold mb-4">Filter Properti</h3>
+    <div className="bg-white max-h-screen p-4 rounded-lg shadow-md flex flex-col gap-4">
+      <select
+        value={model}
+        onChange={(e) => setModel(e.target.value)}
+        className="border text-sm sm:text-md px-3 py-2 rounded-md w-full"
+      >
+        <option value="">Pilih Model</option>
+        <option value="">Semua</option>
+        {modelOptions.map((opt) => (
+          <option key={opt} value={opt}>{opt}</option>
+        ))}
+      </select>
 
-      {/* Filter Harga */}
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">Harga</label>
-        <select
-          value={filters.price}
-          onChange={(e) => setFilters({ ...filters, price: e.target.value })}
-          className="w-full p-2 border border-gray-300 rounded"
-        >
-          <option value="all">Semua Harga</option>
-          <option value="1000000000">Di bawah Rp 1.000.000.000</option>
-          <option value="2000000000">Di bawah Rp 2.000.000.000</option>
-          <option value="3000000000">Di bawah Rp 3.000.000.000</option>
-        </select>
-      </div>
+      <select
+        value={type}
+        onChange={(e) => setType(e.target.value)}
+        className="border text-sm sm:text-md px-3 py-2 rounded-md w-full"
+      >
+        <option value="">Pilih Tipe</option>
+        {typeOptions.map((opt) => (
+          <option key={opt} value={opt}>{opt}</option>
+        ))}
+      </select>
 
-      {/* Filter Kamar */}
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">
-          Kamar Tidur
-        </label>
-        <select
-          value={filters.type}
-          onChange={(e) => setFilters({ ...filters, type: e.target.value })}
-          className="w-full p-2 border border-gray-300 rounded"
-        >
-          <option value="all">Semua Kamar</option>
-          <option value="natural house">1 Kamar</option>
-          <option value="cabin house">2 Kamar</option>
-          <option value="">3 Kamar</option>
-          <option value="4">4 Kamar</option>
-        </select>
-      </div>
-
-      {/* Filter Tipe */}
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">
-          Jenis Properti
-        </label>
-        <select
-          value={filters.type}
-          onChange={(e) => setFilters({ ...filters, type: e.target.value })}
-          className="w-full p-2 border border-gray-300 rounded"
-        >
-          <option value="all">Semua Tipe</option>
-          <option value="modern">Modern</option>
-          <option value="cabin house">cabin house</option>
-          <option value="villa">Villa</option>
-          <option value="pantai">Tepi Laut</option>
-          <option value="kost">Kost</option>
-        </select>
-      </div>
+      <select
+        value={size}
+        onChange={(e) => setSize(e.target.value)}
+        className="border text-sm sm:text-md px-3 py-2 rounded-md w-full"
+      >
+        <option value="">Pilih Ukuran</option>
+        {sizeOptions.map((opt) => (
+          <option key={opt} value={opt}>{opt}</option>
+        ))}
+      </select>
     </div>
   );
 };
 
-export default SidebarPropertyFilter;
+SidebarProperty.propTypes = {
+  onFilter: PropTypes.func.isRequired,
+  modelOptions: PropTypes.arrayOf(PropTypes.string),
+  typeOptions: PropTypes.arrayOf(PropTypes.string),
+  sizeOptions: PropTypes.arrayOf(PropTypes.string),
+};
+
+export default SidebarProperty;
