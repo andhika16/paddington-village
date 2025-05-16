@@ -1,24 +1,24 @@
 import { useState, useEffect } from "react";
 import FilterForm from "../components/property/SidebarPropertyFilter";
-import { getHouses } from "../firebase/firebase-operations"; // Fetching data from Firebase
-import PropertyCard from "../components/property/PropertyCard"; // Import PropertyCard component
+import { getHouses } from "../firebase/firebase-operations";
+import PropertyCard from "../components/property/PropertyCard";
 
 // Function to get unique values from an array of objects based on a key
 const uniqueValues = (arr, key) => [...new Set(arr.map((item) => item[key]))];
 
 const Properties = () => {
-  const [data, setData] = useState([]); // State to store data fetched from Firebase
-  const [filteredData, setFilteredData] = useState([]); // State to store filtered data
-  const [loading, setLoading] = useState(true); // Loading state for data fetching
-  const [error, setError] = useState(null); // State to store error message
+  const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // Fetch houses data from Firebase only once when component mounts
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const houses = await getHouses(); // Assuming getHouses returns the data
+        const houses = await getHouses();
         setData(houses);
-        setFilteredData(houses); // Set initial filtered data to the fetched houses
+        setFilteredData(houses);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching houses:", error);
@@ -28,7 +28,7 @@ const Properties = () => {
     };
 
     fetchData();
-  }, []); // Empty dependency array ensures this runs only once when component mounts
+  }, []);
 
   // Handle filtering of properties
   const handleFilter = ({ model, type, size }) => {
@@ -40,32 +40,40 @@ const Properties = () => {
     );
     // Only update filteredData if it actually changes
     if (filtered.length !== filteredData.length) {
-      setFilteredData(filtered); // Update filtered data if it changed
+      setFilteredData(filtered);
     }
   };
 
   // Render loading, error, or filtered properties
   if (loading) return <p className="text-center py-12">Memuat data...</p>;
   if (error) return <p className="text-center py-12 text-red-600">{error}</p>;
- 
+
   return (
-    <div className="container mt-6 mx-auto flex flex-col sm:flex-row px-2 sm:space-x-4">
-      <FilterForm
-        onFilter={handleFilter}
-        modelOptions={uniqueValues(data, "model")}
-        typeOptions={uniqueValues(data, "type")}
-        sizeOptions={uniqueValues(data, "size")}
-      />
-      {filteredData.length === 0 ? (
-        <p className="text-center py-12">Tidak ada properti yang sesuai.</p>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
-          {filteredData.map((rumah) => (
-            <PropertyCard key={rumah.id || rumah.model} property={rumah} />
-          ))}
-        </div>
-      )}
-    </div>
+<div className="container mx-auto px-4 py-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+  {/* Sidebar (1 kolom dari 4) */}
+  <div className="md:col-span-1">
+    <FilterForm
+      onFilter={handleFilter}
+      modelOptions={uniqueValues(data, "model")}
+      typeOptions={uniqueValues(data, "type")}
+      sizeOptions={uniqueValues(data, "size")}
+    />
+  </div>
+
+  {/* Produk (3 kolom dari 4) */}
+  <div className="md:col-span-3">
+    {filteredData.length === 0 ? (
+      <p className="text-center py-12">Tidak ada properti yang sesuai.</p>
+    ) : (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {filteredData.map((rumah) => (
+          <PropertyCard key={rumah.id || rumah.model} property={rumah} />
+        ))}
+      </div>
+    )}
+  </div>
+</div>
+
   );
 };
 

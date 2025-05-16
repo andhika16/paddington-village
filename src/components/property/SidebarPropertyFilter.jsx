@@ -13,7 +13,12 @@ const useDebounce = (value, delay) => {
   return debouncedValue;
 };
 
-const SidebarProperty = ({ onFilter, modelOptions = [], typeOptions = [], sizeOptions = [] }) => {
+const SidebarProperty = ({
+  onFilter,
+  modelOptions = [],
+  typeOptions = [],
+  sizeOptions = [],
+}) => {
   const [model, setModel] = useState("");
   const [type, setType] = useState("");
   const [size, setSize] = useState("");
@@ -23,11 +28,45 @@ const SidebarProperty = ({ onFilter, modelOptions = [], typeOptions = [], sizeOp
   const debouncedSize = useDebounce(size, 300);
 
   useEffect(() => {
-    onFilter({ model: debouncedModel, type: debouncedType, size: debouncedSize });
+    onFilter({
+      model: debouncedModel,
+      type: debouncedType,
+      size: debouncedSize,
+    });
   }, [debouncedModel, debouncedType, debouncedSize, onFilter]);
 
   return (
-    <div className="bg-white max-h-screen p-4 rounded-lg shadow-md flex flex-col gap-4">
+    <div className=" bg-white max-h-screen p-4 rounded-lg shadow-md flex flex-col gap-4">
+      <div className="space-y-2">
+        <p className="font-medium text-sm sm:text-md">Pilih Tipe:</p>
+        <ul className="flex flex-wrap gap-2">
+          <li>
+            <button
+              onClick={() => setType("")}
+              className={`px-3 py-1 rounded-md border text-sm sm:text-md ${
+                type === "" ? "bg-blue-500 text-white" : "bg-white text-black"
+              }`}
+            >
+              Semua
+            </button>
+          </li>
+          {typeOptions.map((opt) => (
+            <li key={opt}>
+              <button
+                onClick={() => setType(opt)}
+                className={`px-3 py-1 rounded-md border text-sm sm:text-md ${
+                  type === opt
+                    ? "bg-blue-500 text-white"
+                    : "bg-white text-black"
+                }`}
+              >
+                {opt}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+
       <select
         value={model}
         onChange={(e) => setModel(e.target.value)}
@@ -36,18 +75,9 @@ const SidebarProperty = ({ onFilter, modelOptions = [], typeOptions = [], sizeOp
         <option value="">Pilih Model</option>
         <option value="">Semua</option>
         {modelOptions.map((opt) => (
-          <option key={opt} value={opt}>{opt}</option>
-        ))}
-      </select>
-
-      <select
-        value={type}
-        onChange={(e) => setType(e.target.value)}
-        className="border text-sm sm:text-md px-3 py-2 rounded-md w-full"
-      >
-        <option value="">Pilih Tipe</option>
-        {typeOptions.map((opt) => (
-          <option key={opt} value={opt}>{opt}</option>
+          <option key={opt} value={opt}>
+            {opt}
+          </option>
         ))}
       </select>
 
@@ -57,8 +87,11 @@ const SidebarProperty = ({ onFilter, modelOptions = [], typeOptions = [], sizeOp
         className="border text-sm sm:text-md px-3 py-2 rounded-md w-full"
       >
         <option value="">Pilih Ukuran</option>
+        <option value="">Semua</option>
         {sizeOptions.map((opt) => (
-          <option key={opt} value={opt}>{opt}</option>
+          <option key={opt} value={opt}>
+            {opt}
+          </option>
         ))}
       </select>
     </div>

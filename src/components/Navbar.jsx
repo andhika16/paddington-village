@@ -18,7 +18,7 @@ const Navbar = () => {
   const navLinks = [
     { name: "Beranda", path: "/" },
     { name: "Properti", path: "/properties" },
-    { name: "Tentang Kami", path: "/about" },
+    { name: "Tentang", path: "/about" },
     { name: "Kontak", path: "/contact" },
     { name: "Form", path: "/propertiesForm" },
   ];
@@ -27,14 +27,14 @@ const Navbar = () => {
     <header
       className={`sticky top-0 z-50 transition-all duration-300 ${
         isTop
-          ? "bg-white/20 backdrop-blur-md shadow-none"
+          ? "bg-transprarent shadow-none"
           : "bg-white shadow-md"
       }`}
     >
       <div className="container mx-auto px-4 py-2 flex justify-between items-center">
         {/* Logo */}
         <Link to="/" >
-          <img className="w-32 md:w-36" src={PaddingtonLogo} alt="paddington-logo" />
+          <img className="w-32 md:w-48" src={PaddingtonLogo} alt="paddington-logo" />
         </Link>
 
         {/* Desktop Nav */}
@@ -45,7 +45,7 @@ const Navbar = () => {
               to={link.path}
               className={({ isActive }) =>
                 isActive
-                  ? "text-primary underline"
+                  ? "text-primary "
                   : "hover:text-primary transition"
               }
             >
@@ -53,8 +53,6 @@ const Navbar = () => {
             </NavLink>
           ))}
         </nav>
-
-        {/* Mobile Button */}
         <button
           className="md:hidden text-2xl text-gray-700"
           onClick={() => setIsOpen(!isOpen)}
@@ -62,8 +60,6 @@ const Navbar = () => {
           {isOpen ? <FiX /> : <FiMenu />}
         </button>
       </div>
-
-      {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden  bg-white shadow-md px-4 pb-4 space-y-2">
           {navLinks.map((link) => (

@@ -34,36 +34,56 @@ const PropertyDetail = () => {
   if (error) return <p className="text-center py-12 text-red-600">{error}</p>;
 
   return (
-    <div className="container mx-auto ">
+    <div className="container mx-auto px-6">
       {/* Hero Gambar */}
-      <section className="py-12 bg-gray-100">
-        <div className="sm:px-6 lg:px-8">
-          <div className="sm:flex sm:space-x-6">
+      <section className="py-6">
+        <div className="">
+          <div className="lg:flex md:flex-row flex-col sm:space-x-6 ">
             <img
               src={property.gambar}
               alt={property.type}
-              className="w-full sm:w-1/2 h-96 object-cover rounded-xl mb-6 sm:mb-0"
+              className="w-full sm:w-1/2 object-contain rounded-xl mb-6 sm:mb-0"
             />
             <div className="sm:w-1/2">
-              <h2 className="text-3xl font-bold mb-4 capitalize">
+              <h2 className="text-3xl font-bold mb-4 capitalize border-b-2  pb-6">
                 {property.type} - {property.model}
               </h2>
-              <p className="text-lg text-gray-700 leading-relaxed">
+              <p className="text-lg text-gray-900 leading-relaxed">
                 Rumah {property.model} tipe {property.type} dengan luas{" "}
-                {property.size}, konstruksi {property.area_konstruksi}, dan
-                cocok untuk {property.jumlah_penghuni} penghuni.
+                {property.size} Meter , konstruksi {property.areaKonstruksi}{" "}
+                Meter.
               </p>
+              <ul className="flex flex-col space-y-6 mt-6">
+                <li>
+                  <h6>Konfigurasi Standard</h6>{" "}
+                  <p className="text-sm text-gray-700 leading-loose tracking-wide">
+                    finishing, mekanisme tirai, insulasi termal, tahan air,
+                    perlindungan terhadap angin, kunci pintar, pencahayaan dalam
+                    dan luar ruangan, instalasi listrik, saluran pembuangan,
+                    pengolahan air.
+                  </p>
+                </li>
+                <li>
+                  <h6>Konfigurasi Kostum</h6>
+                  <p className="text-sm text-gray-700 leading-loose tracking-wide">
+                    Dapur (kompor induksi, lemari bawah dan atas, wastafel, meja
+                    batu buatan), Kamar mandi (toilet, wastafel, cermin pintar,
+                    lemari wastafel), Sofa, meja kopi, lemari TV, tempat tidur
+                    ganda, meja samping tempat tidur, kulkas, TV.
+                  </p>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
       </section>
 
       {/* Detail Properti */}
-      <section className="py-12 bg-white">
-        <div className=" grid grid-cols-1 md:grid-cols-2 gap-8">
+      <section className="py-6 bg-white">
+        <div className=" grid grid-cols-2 ">
           <div>
             <h3 className="text-2xl font-semibold mb-4">Spesifikasi</h3>
-            <ul className="space-y-3 text-gray-700">
+            <ul className="space-y-3 text-sm sm:text-md text-gray-700">
               <li>
                 <strong>Luas:</strong> {property.size} Meter
               </li>
@@ -99,7 +119,9 @@ const PropertyDetail = () => {
           </div>
         </div>
       </section>
-
+        {/* TODO:ini nanti bisa ditambahkan detail-detail lagi lebih lengkap */}
+      <section>
+      </section>
       {/* CTA WhatsApp */}
       <section className="py-12 bg-blue-50 text-center">
         <h2 className="text-2xl font-semibold mb-4">

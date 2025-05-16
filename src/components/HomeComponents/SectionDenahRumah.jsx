@@ -1,4 +1,3 @@
-import React from "react";
 
 const SectionDenahRumah = () => {
   return (
@@ -14,7 +13,7 @@ const SectionDenahRumah = () => {
       </div>
       <div className="">
         <img
-          src={denah1}
+          src=""
           alt="rumahdenahsatu.svg"
           className="rounded-xl shadow-md w-full"
         />

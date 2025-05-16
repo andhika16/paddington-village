@@ -6,8 +6,8 @@ const Footer = () => {
       <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Brand */}
         <div>
-          <h2 className="text-2xl font-bold mb-2 text-blue-400">RumahAsri</h2>
-          <p className="text-sm text-gray-300 tracking-wider">
+          <h2 className="text-2xl font-bold mb-2 text-blue-400 tracking-wide">Paddington village</h2>
+          <p className="text-sm text-gray-300 tracking-wide">
             Temukan rumah impian Anda bersama kami. Hunian nyaman dan aman untuk masa depan Anda.
           </p>
         </div>
@@ -29,13 +29,13 @@ const Footer = () => {
           <ul className="text-gray-300 text-sm space-y-1">
             <li>📍 Jl. Perumahan Damai No. 88</li>
             <li>📞 0852-1234-5678</li>
-            <li>✉️ info@rumahasri.com</li>
+            <li>✉️ info@Paddington village.com</li>
           </ul>
         </div>
       </div>
 
       <div className="text-center text-sm text-gray-400 mt-8">
-        &copy; {new Date().getFullYear()} RumahAsri. All rights reserved.
+        &copy; {new Date().getFullYear()} Paddington village. All rights reserved.
       </div>
     </footer>
   );
