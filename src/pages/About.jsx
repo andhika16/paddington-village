@@ -1,54 +1,69 @@
-import paddington from "../assets/assetbawaan/about_bg.webp";
+import aboutImage from "../assets/assetbawaan/about_bg.webp";
+import Sidebar from "../components/products/Sidebar"
+import useProducts from "../hooks/useProducts";
 const About = () => {
-  // FIXME:perbaiki lagi ukuran gambar,text,layout dll untuk about
+  const { filterByType, getUniqueTypes } = useProducts();
   return (
-    <section className="relative">
-      {/* Background Image */}
-      <div className="absolute inset-0">
+    <section className="container mx-auto px-4 py-10 grid grid-cols-1 md:grid-cols-4 gap-8">
+      {/* Sidebar */}
+      <aside className="md:col-span-1 space-y-8">
+        {/* Produk */}
+        <div className="md:col-span-1">
+          <Sidebar types={getUniqueTypes()} onFilter={filterByType} />
+        </div>
+
+        {/* Contact */}
+        <div className="bg-gray-50 border rounded-lg p-4">
+          <h3 className="font-bold text-lg mb-2">Contact Us</h3>
+          <p className="text-sm text-gray-700 mb-3">
+            Do you still have questions or would you like learn more about
+            ZTHOUSE?
+          </p>
+          <div className="text-sm space-y-1">
+            <p>📱 8618870949983</p>
+            <p>📞 +86-18566028140</p>
+            <p>📧 info@volferda.com</p>
+          </div>
+        </div>
+      </aside>
+
+      {/* Konten */}
+      <main className="md:col-span-3">
+        {/* Judul */}
+        <h2 className="text-2xl font-bold mb-4">About Us</h2>
+
+        {/* Gambar */}
         <img
-          src={paddington}
-          alt="image-depan"
-          className="w-full h-[420px] object-cover opacity-"
+          src={aboutImage}
+          alt="Company Image"
+          className=" w-full h-80 object-cover mb-6 shadow"
         />
-      </div>
 
-      {/* Overlay Content */}
-      <div className="relative z-10 container mx-auto px-6 py-20 max-w-3xl ">
-        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-6">
-          Rumah Kapsul: Hunian Masa Depan
-        </h2>
+        {/* Tab Navigation (Statik) */}
+        <div className="border-b mb-4 flex space-x-6 text-sm font-medium">
+          <button className="border-b-2 border-blue-600 text-blue-600 pb-1">
+            Introduction
+          </button>
+          <button className="text-gray-600 hover:text-blue-600">
+            Product Delivery Center
+          </button>
+        </div>
 
-        <p className="text-white text-sm sm:text-base leading-relaxed mb-4">
-          <strong>
-            Kami adalah pelopor inovasi hunian masa depan – Rumah Kapsul.
-          </strong>
-        </p>
-
-        <p className="text-white text-sm sm:text-base leading-relaxed mb-4">
-          Terinspirasi oleh efisiensi, keberlanjutan, dan desain futuristik,
-          kami menghadirkan solusi tempat tinggal yang{" "}
-          <strong>ringkas, fungsional, dan ramah lingkungan</strong>. Rumah
-          Kapsul adalah representasi gaya hidup{" "}
-          <strong>minimalis, cerdas, dan fleksibel</strong>.
-        </p>
-
-        <p className="text-white text-sm sm:text-base leading-relaxed mb-4">
-          Didirikan dengan semangat untuk menjawab tantangan ruang dan
-          urbanisasi, kami mengembangkan unit hunian yang dapat{" "}
-          <strong>dirakit cepat, hemat energi, dan mudah dipindah</strong> —
-          cocok untuk kaum urban, traveler, pekerja proyek, hingga solusi hunian
-          darurat.
-        </p>
-
-        <p className="text-white text-sm sm:text-base leading-relaxed mb-6">
-          Kami percaya bahwa masa depan adalah tentang{" "}
-          <strong>kehidupan berkualitas dalam ruang yang efisien.</strong>
-        </p>
-
-        <p className="text-sm sm:text-base text-blue-700 font-semibold">
-          Hubungi Tim Kami →
-        </p>
-      </div>
+        {/* Isi Konten */}
+        <div className="space-y-4 text-sm sm:text-base text-gray-700 leading-relaxed">
+          <p>
+            <strong>VOLFERDA Industry Limited</strong> is a Global leading
+            developer of cultural and tourism real estate. We develop advanced
+            cultural and tourism intelligent housing products for global
+            clients.
+          </p>
+          <p>
+            We provide product solutions based on customer requirements from
+            early project planning, mid-term product delivery, to later project
+            operation.
+          </p>
+        </div>
+      </main>
     </section>
   );
 };

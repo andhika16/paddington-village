@@ -15,7 +15,7 @@ const Home = () => {
             <h1 className="text-4xl text-left text-white md:text-5xl capitalize font-bold mb-4">
               paddington <span className="text-primary">Village</span>
             </h1>
-            <p className="text-left text-white text-sm md:text-md mb-6 tracking-wider">
+            <p className="text-left text-white text-md md:text-md mb-6 tracking-wider">
               rumah fabrikasi berukuran{" "}
               <span className="text-primary">minimalis</span> yang dirancang
               untuk efisiensi ruang dan biaya, untuk hunian yang ergonomis
@@ -102,20 +102,20 @@ const Home = () => {
           <h2 className="text-xl md:text-2xl capitalize font-bold text-gray-800 mb-6">
             <span className="text-primary"> paddington </span> village
           </h2>
-          <p className="text-gray-600 md:text-md leading-relaxed mb-3">
+          <p className="text-gray-600 text-sm md:text-md leading-relaxed mb-3">
             <span className="font-semibold">paddington village</span> adalah
             pelopor solusi hunian modern di kawasan perkotaan padat,
             menghadirkan rumah kapsul pintar yang efisien, stylish, dan ramah
             lingkungan untuk generasi masa kini.
           </p>
-          <p className="text-gray-600 md:text-md leading-relaxed mb-3">
+          <p className="text-gray-600 text-sm md:text-md leading-relaxed mb-3">
             Kami mengembangkan konsep hunian mikro berteknologi tinggi yang
             dirancang khusus untuk kehidupan kota yang dinamis. Dengan desain
             modular dan penggunaan material prefab berkualitas tinggi,
             paddington village memaksimalkan fungsi dalam ruang terbatas tanpa
             mengorbankan kenyamanan.
           </p>
-          <p className="text-gray-600 md:text-md leading-relaxed mb-8">
+          <p className="text-gray-600 text-sm md:text-md leading-relaxed mb-8">
             Setiap unit rumah kapsul dilengkapi dengan sistem smart home,
             efisiensi energi, dan tata ruang modern yang mendukung gaya hidup
             minimalis dan mobilitas tinggi di kota besar.

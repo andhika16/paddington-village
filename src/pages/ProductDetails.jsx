@@ -1,37 +1,28 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getHouseById } from "../../firebase/firebase-operations";
+import { getHouses } from "../firebase/firebase-operations";
 
-const PropertyDetail = () => {
+const ProductDetail = () => {
   const { id } = useParams();
-  const [property, setProperty] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [product, setProduct] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchProperty = async () => {
-      setLoading(true);
-      setError(null);
+    const fetchProduct = async () => {
       try {
-        const data = await getHouseById(id);
-        if (!data) {
-          setError("Properti tidak ditemukan.");
-        } else {
-          setProperty(data);
-        }
+        const all = await getHouses();
+        const found = all.find((item) => item.id === id || item.model === id);
+        if (!found) throw new Error("Produk tidak ditemukan");
+        setProduct(found);
       } catch (err) {
-        console.error("Gagal mengambil data:", err);
-        setError("Gagal memuat data properti.");
-      } finally {
-        setLoading(false);
+        setError(err.message);
       }
     };
-
-    fetchProperty();
+    fetchProduct();
   }, [id]);
 
-  if (loading) return <p className="text-center py-12">Memuat data...</p>;
-  if (error) return <p className="text-center py-12 text-red-600">{error}</p>;
+  if (error) return <p className="text-center text-red-600">{error}</p>;
+  if (!product) return <p className="text-center">Loading...</p>;
 
   return (
     <div className="container mx-auto px-6">
@@ -40,23 +31,23 @@ const PropertyDetail = () => {
         <div className="">
           <div className="lg:flex md:flex-row flex-col sm:space-x-6 ">
             <img
-              src={property.gambar}
-              alt={property.type}
-              className="w-full sm:w-1/2 object-contain rounded-xl mb-6 sm:mb-0"
+              src={product.gambar}
+              alt={product.type}
+              className="w-full sm:w-[500px] object-contain  mb-6 sm:mb-0"
             />
             <div className="sm:w-1/2">
               <h2 className="text-3xl font-bold mb-4 capitalize border-b-2  pb-6">
-                {property.type} - {property.model}
+                {product.type} - {product.model}
               </h2>
-              <p className="text-lg text-gray-900 leading-relaxed">
-                Rumah {property.model} tipe {property.type} dengan luas{" "}
-                {property.size} Meter , konstruksi {property.areaKonstruksi}{" "}
+              <p className="text-sm text-gray-900 leading-relaxed">
+                Rumah {product.model} tipe {product.type} dengan luas{" "}
+                {product.size} Meter , konstruksi {product.areaKonstruksi}{" "}
                 Meter.
               </p>
               <ul className="flex flex-col space-y-6 mt-6">
                 <li>
                   <h6>Konfigurasi Standard</h6>{" "}
-                  <p className="text-sm text-gray-700 leading-loose tracking-wide">
+                  <p className="text-xs text-gray-700 leading-loose tracking-wide">
                     finishing, mekanisme tirai, insulasi termal, tahan air,
                     perlindungan terhadap angin, kunci pintar, pencahayaan dalam
                     dan luar ruangan, instalasi listrik, saluran pembuangan,
@@ -65,7 +56,7 @@ const PropertyDetail = () => {
                 </li>
                 <li>
                   <h6>Konfigurasi Kostum</h6>
-                  <p className="text-sm text-gray-700 leading-loose tracking-wide">
+                  <p className="text-xs text-gray-700 leading-loose tracking-wide">
                     Dapur (kompor induksi, lemari bawah dan atas, wastafel, meja
                     batu buatan), Kamar mandi (toilet, wastafel, cermin pintar,
                     lemari wastafel), Sofa, meja kopi, lemari TV, tempat tidur
@@ -80,36 +71,36 @@ const PropertyDetail = () => {
 
       {/* Detail Properti */}
       <section className="py-6 bg-white">
-        <div className=" grid grid-cols-2 ">
+        <div className=" space-y-6 ">
           <div>
-            <h3 className="text-2xl font-semibold mb-4">Spesifikasi</h3>
+            <h3 className="text-xl font-semibold mb-4">Spesifikasi</h3>
             <ul className="space-y-3 text-sm sm:text-md text-gray-700">
               <li>
-                <strong>Luas:</strong> {property.size} Meter
+                <strong>Luas:</strong> {product.size} Meter
               </li>
               <li>
-                <strong>Area Konstruksi:</strong> {property.areaKonstruksi}
+                <strong>Area Konstruksi:</strong> {product.areaKonstruksi}
               </li>
               <li>
-                <strong>Jumlah Penghuni:</strong> {property.jumlahPenghuni}
+                <strong>Jumlah Penghuni:</strong> {product.jumlahPenghuni}
               </li>
               <li>
-                <strong>Dimensi:</strong> {property.dimensi}
+                <strong>Dimensi:</strong> {product.dimensi}
               </li>
               <li>
-                <strong>Jumlah Lantai:</strong> {property.jumlahLantai}
+                <strong>Jumlah Lantai:</strong> {product.jumlahLantai}
               </li>
               <li>
-                <strong>Berat Unit:</strong> {property.beratUnit}
+                <strong>Berat Unit:</strong> {product.beratUnit}
               </li>
             </ul>
           </div>
           <div>
-            <h3 className="text-2xl font-semibold mb-4">Kelengkapan</h3>
-            {Array.isArray(property.kelengkapan) &&
-            property.kelengkapan.length > 0 ? (
+            <h3 className="text-xl font-semibold mb-4">Kelengkapan</h3>
+            {Array.isArray(product.kelengkapan) &&
+            product.kelengkapan.length > 0 ? (
               <ul className="list-disc list-inside text-gray-700">
-                {property.kelengkapan.map((item, idx) => (
+                {product.kelengkapan.map((item, idx) => (
                   <li key={idx}>{item}</li>
                 ))}
               </ul>
@@ -140,6 +131,4 @@ const PropertyDetail = () => {
   );
 };
 
-PropertyDetail.propTypes = {};
-
-export default PropertyDetail;
+export default ProductDetail;

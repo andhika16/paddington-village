@@ -17,68 +17,76 @@ const Navbar = () => {
 
   const navLinks = [
     { name: "Beranda", path: "/" },
-    { name: "Properti", path: "/properties" },
+    { name: "Properti", path: "/products" },
     { name: "Tentang", path: "/about" },
     { name: "Kontak", path: "/contact" },
-    { name: "Form", path: "/propertiesForm" },
+    { name: "Form", path: "/product-form" },
   ];
 
   return (
-    <header
-      className={`sticky top-0 z-50 transition-all duration-300 ${
-        isTop
-          ? "bg-transprarent shadow-none"
-          : "bg-white shadow-md"
-      }`}
-    >
-      <div className="container mx-auto px-4 py-2 flex justify-between items-center">
-        {/* Logo */}
-        <Link to="/" >
-          <img className="w-32 md:w-48" src={PaddingtonLogo} alt="paddington-logo" />
-        </Link>
-
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex space-x-6 text-gray-700 font-medium">
-          {navLinks.map((link) => (
-            <NavLink
-              key={link.path}
-              to={link.path}
-              className={({ isActive }) =>
-                isActive
-                  ? "text-primary "
-                  : "hover:text-primary transition"
-              }
-            >
-              {link.name}
-            </NavLink>
-          ))}
-        </nav>
-        <button
-          className="md:hidden text-2xl text-gray-700"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          {isOpen ? <FiX /> : <FiMenu />}
-        </button>
+    <>
+      <div
+        className="container mx-auto flex justify-end space-x-9 font-extralight text-sm"
+      >
+        <p>+(627)-439943993</p>
+        <p>Paddington@gmail.com</p>
       </div>
-      {isOpen && (
-        <div className="md:hidden  bg-white shadow-md px-4 pb-4 space-y-2">
-          {navLinks.map((link) => (
-            <NavLink
-              key={link.path}
-              to={link.path}
-              onClick={() => setIsOpen(false)}
-              className={({ isActive }) =>
-                `block py-2 border-b ${
-                  isActive ? "text-primary  font-semibold" : "text-gray-700"
-                }`
-              }
-            >
-              {link.name}
-            </NavLink>
-          ))}
+      <header
+        className={`sticky top-0 z-50 transition-all duration-300 ${
+          isTop ? "bg-transprarent shadow-none" : "bg-white shadow-md"
+        }`}
+      >
+        <div className="container mx-auto px-4 py-2 flex justify-between items-center">
+          {/* Logo */}
+          <Link to="/">
+            <img
+              className="w-32 md:w-48"
+              src={PaddingtonLogo}
+              alt="paddington-logo"
+            />
+          </Link>
+
+          {/* Desktop Nav */}
+          <nav className="hidden md:flex space-x-6 text-gray-700 font-medium">
+            {navLinks.map((link) => (
+              <NavLink
+                key={link.path}
+                to={link.path}
+                className={({ isActive }) =>
+                  isActive ? "text-primary " : "hover:text-primary transition"
+                }
+              >
+                {link.name}
+              </NavLink>
+            ))}
+          </nav>
+          <button
+            className="md:hidden text-2xl text-gray-700"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            {isOpen ? <FiX /> : <FiMenu />}
+          </button>
         </div>
-      )}
-    </header>
+        {isOpen && (
+          <div className="md:hidden  bg-white shadow-md px-4 pb-4 space-y-2">
+            {navLinks.map((link) => (
+              <NavLink
+                key={link.path}
+                to={link.path}
+                onClick={() => setIsOpen(false)}
+                className={({ isActive }) =>
+                  `block py-2 border-b ${
+                    isActive ? "text-primary  font-semibold" : "text-gray-700"
+                  }`
+                }
+              >
+                {link.name}
+              </NavLink>
+            ))}
+          </div>
+        )}
+      </header>
+    </>
   );
 };
 
