@@ -76,7 +76,7 @@ const HouseForm = () => {
 
     if (!validateForm()) return;
 
-    setIsSubmitting(true); // ✅ Mulai proses
+    setIsSubmitting(true); 
 
     const namaFile = `../../../public/image/${gambar.name}`;
 
